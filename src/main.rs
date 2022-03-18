@@ -5,6 +5,7 @@ use bevy::prelude::*;
 const WINDOW_TITLE: &str = "Space shooter game on Rust"; 
 const PLAYER_SPRITE: &str =  "Texture2D/shiptt_0012_Layer-3-copy-9.png";
 const BACKGROUND: &str = "Texture2D/bg1.png";
+const TIME_STEP: f32 = 1. / 60.;
 pub struct Materials {
     background_materials: Handle<Image>,
     player_materials : Handle<Image>
@@ -12,6 +13,17 @@ pub struct Materials {
 pub struct WinSize {
     w: f32,
     h: f32,
+}
+
+#[derive(Component)]
+struct Player;
+
+#[derive(Component)]
+struct PlayerSpeed(f32);    //tuple struct
+impl Default for PlayerSpeed {
+    fn default() -> Self {
+        Self(500.)
+    }
 }
 
 fn main() {
@@ -72,6 +84,8 @@ fn player_spawn(mut commands: Commands, materials: Res<Materials>, winsize: Res<
             ..Default::default() 
         },
         ..Default::default()
-    });   
+    })
+    .insert(Player)
+    .insert(PlayerSpeed::default());   
 
 }
