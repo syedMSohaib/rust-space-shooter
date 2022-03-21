@@ -1,4 +1,4 @@
-use bevy::{app::PluginGroupBuilder, prelude::*};
+use bevy::prelude::*;
 
 use crate::{Materials, Player, WinSize, Speed, Laser, TIME_STEP, PlayerReadyToFire};
 
@@ -54,7 +54,7 @@ fn player_fire(
     keyboard_input: Res<Input<KeyCode>>, 
     mut query: Query<(&Transform, &mut PlayerReadyToFire, With<Player>)>,
 ){
-    for (mut transform, mut ready_to_fire, _) in query.iter_mut() {
+    for (transform, mut ready_to_fire, _) in query.iter_mut() {
         if ready_to_fire.0 && keyboard_input.pressed(KeyCode::Space) {
             let x = transform.translation.x;
             let y = transform.translation.y; 
@@ -100,8 +100,6 @@ fn player_movement(
 ){
 
     for (speed, mut transform, _) in query.iter_mut() {
-
-        const MAX_VELOCITY: f32 = 16.0;
 
         let dir = if keyboard_input.pressed(KeyCode::Left) {
             -1.

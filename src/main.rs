@@ -1,9 +1,8 @@
-#![allow(unused)] //silence unsed warning for learning 
+// #![allow(unused)] //silence unsed warning for learning 
 
 mod player;
 
 use bevy::prelude::*;
-use bevy::log;
 use player::PlayerPlugin;
 
 const WINDOW_TITLE: &str = "Space shooter game on Rust"; 
@@ -18,6 +17,7 @@ pub struct Materials {
     laser: Handle<Image>
 }   
 pub struct WinSize {
+    #[allow(unused)]
     w: f32,
     h: f32,
 }
@@ -52,10 +52,6 @@ fn main() {
         .add_plugin(PlayerPlugin)
         .add_startup_system(setup.system())
         .add_startup_stage("game_setup_background", SystemStage::single(background_spawn.system()))
-        // .add_startup_stage("game_setup_player", SystemStage::single(player_spawn.system()))
-        // .add_system(player_movement.system())
-        // .add_system(player_fire.system())
-        // .add_system(laser_movement.system())
         .run()
 
 }
@@ -63,11 +59,10 @@ fn main() {
 fn setup(
     mut commands: Commands, 
     asset_server: Res<AssetServer>, 
-    mut materials: ResMut<Assets<ColorMaterial>>, 
     mut windows: ResMut<Windows>
  ) {
 
-    let mut window = windows.get_primary_mut().unwrap();
+    let window = windows.get_primary_mut().unwrap();
 
     //camera
     commands.spawn_bundle(OrthographicCameraBundle::new_2d());
