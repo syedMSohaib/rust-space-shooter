@@ -22,7 +22,7 @@ struct Player;
 struct PlayerSpeed(f32);    //tuple struct
 impl Default for PlayerSpeed {
     fn default() -> Self {
-        Self(500.)
+        Self(5.)
     }
 }
 
@@ -39,6 +39,7 @@ fn main() {
         .add_startup_system(setup.system())
         .add_startup_stage("game_setup_background", SystemStage::single(background_spawn.system()))
         .add_startup_stage("game_setup_player", SystemStage::single(player_spawn.system()))
+        .add_system(player_movement.system())
         .run()
 
 }
@@ -89,3 +90,31 @@ fn player_spawn(mut commands: Commands, materials: Res<Materials>, winsize: Res<
     .insert(PlayerSpeed::default());   
 
 }
+
+fn player_movement(
+    keyboard_input: Res<Input<KeyCode>>, 
+    mut query: Query<(&PlayerSpeed, &mut Transform, With<Player>)>,
+){
+
+    for (speed, mut transform, _) in query.iter_mut() {
+
+        const MAX_VELOCITY: f32 = 16.0;
+
+        let dir = if keyboard_input.pressed(KeyCode::Left) {
+            -1.
+        }
+        else if keyboard_input.pressed(KeyCode::Right) {
+            1.
+        }
+        else{
+            0.
+        };
+
+
+        transform.translation.x += dir * speed.0 + TIME_STEP;
+        // transform.translation.x += dir + TIME_STEP;
+        transform.translation.x = transform.translation.x.clamp(-320.0, 320.0);
+        
+    }
+  
+}   
