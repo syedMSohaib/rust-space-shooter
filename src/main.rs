@@ -132,17 +132,30 @@ fn player_fire(
             let x = transform.translation.x;
             let y = transform.translation.y; 
             // info!("x={:?} y={:?}",x, y);
-            commands.spawn_bundle(SpriteBundle {
-                texture: materials.laser.clone(),
-                transform: Transform {
-                    translation: Vec3::new(x, y + 15, 0.),
-                    scale: Vec3::new(0.1, 0.1, 1.0),
-                    ..Default::default() 
-                },
-                ..Default::default()
-            })
-            .insert(Laser)
-            .insert(Speed::default());   
+
+            let mut spawn_lasers = |x_offset: f32| {
+                commands.spawn_bundle(SpriteBundle {
+                    texture: materials.laser.clone(),
+                    transform: Transform {
+                        translation: Vec3::new(x + x_offset, y + 15., 0.),
+                        scale: Vec3::new(0.1, 0.1, 1.0),
+                        ..Default::default() 
+                    },
+                    ..Default::default()
+                })
+                .insert(Laser)
+                .insert(Speed::default());   
+    
+            };
+
+            let x_offset = 180. / 9. - 5.;
+
+
+            info!("x_offset={:?}",x_offset);
+
+            spawn_lasers(x_offset);
+            spawn_lasers(-x_offset);
+
 
             ready_to_fire.0 = false;
         }
